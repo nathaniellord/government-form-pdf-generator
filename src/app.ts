@@ -1,11 +1,14 @@
 import express = require('express');
 import { StateWithholdingForms } from './state-taxes/states';
-const generateStateForm = require('./state-taxes/states');
+import expressValidator from 'express-validator';
+import bodyParser from 'body-parser';
 const generateFederalForm = require('./federal/federal');
 import config from 'config';
 
 // Create a new express application instance
 const app: express.Application = express();
+app.use(bodyParser.json());
+app.use(expressValidator());
 
 const stateWithholding = new StateWithholdingForms();
 
@@ -15,19 +18,16 @@ app.get('/', function (req, res) {
   res.end();
 });
 // State Withholding Forms
-app.get('/state/:state/withholding/:year?', function (req, res) {
-  res.writeHead(200, { 'Content-Type': 'application/pdf' });
-  stateWithholding.generateStateForm(req.params.state, req, res, req.params.year);
+app.get('/state/:state/withholding', function (req, res) {
+  stateWithholding.generateStateForm(req.params.state, req, res);
   res.end();
 });
-app.post('/state/:state/withholding/:year?', function (req, res) {
-  res.writeHead(200, { 'Content-Type': 'application/pdf' });
-  stateWithholding.generateStateForm(req.params.state, req, res, req.params.year);
+app.post('/state/:state/withholding', function (req, res) {
+  stateWithholding.generateStateForm(req.params.state, req, res);
   res.end();
 });
 // Federal Forms
-app.get('/federal/:formName/:year?', function (req, res) {
-  res.writeHead(200, { 'Content-Type': 'application/pdf' });
+app.get('/federal/:formName', function (req, res) {
   generateFederalForm(req.params.formName, req, res);
   res.end();
 });

@@ -1,46 +1,64 @@
 import hummus from 'hummus';
+const stateConfig = require('./withholding.config');
+const utils = require('../../utils');
+const fs = require('fs');
 
-function generatePdf(req: any, res: any, year: number) {
+function generatePdf(req: any, res: any) {
   /** here we will place the pdf building code **/
+  let date = new Date();
   if (req.method === 'GET') {
+    if (req.query.hasOwnProperty('date')) {
+      date = new Date(req.query.date);
+    }
     if (req.query.hasOwnProperty('demo')) {
       console.log('Demo data');
     } else {
 
     }
+  } else if (req.method === 'POST') {
+    if (req.body.hasOwnProperty('date')) {
+      date = new Date(req.body.date);
+    }
   }
 
-  var data = {
-    firstName: 'John',
-    middleInitial: 'L',
-    lastName: 'Doe',
-    ssn: '123-45-6789',
-    address: '12345 W Some Really Long Street Address Ave.',
-    city: 'Montgomery',
-    state: 'AL',
-    zip: '36104',
-    line1: '0',
-    line2: 'S',
-    line3: '',
-    line4: '1',
-    line5: '0',
-    line6: '2',
-    eName: 'Resource Management Inc.',
-    eIN: '12-34567890-841',
-    eAddress: '510 200 W #100',
-    eCity: 'Salt Lake City',
-    eState: 'UT',
-    eZip: '84101',
-    date: '03/28/2019'
+  // Get the correct form based on dates
+  const form = utils.getStateWithholdingForm(stateConfig.forms, date);
+  if (form === null) {
+    res.status(404).send(`State withholding form not located for the selected date`);
+    return;
   }
 
+  let data = null;
+  // Validate data inputs
+  if (req.method === 'GET') {
+    if (req.query.hasOwnProperty('demo')) {
+      data = form.demo;
+    }
+  } else if (req.method === 'POST') {
+    // Validate the data inputs
+    const errors = null;
+    if (errors) {
+      res.status(500).send(JSON.stringify(errors));
+      return;
+    }
+  }
+
+  // If there is no data and the request hasn't been exited for validation errors then we only need to serve up the raw file without modifications
+  if (data === null) {
+    const pdf = fs.readFileSync(`${__dirname}/../../../documents/${form.file}`);
+    res.contentType('application/pdf');
+    res.send(pdf);
+    return;
+  }
+
+  // At this point we have the data validated and the file ready to serve
   const pdfWriter = hummus.createWriterToModify(
-    new hummus.PDFRStreamForFile(__dirname + '/../../../documents/AL-2014.pdf'),
+    new hummus.PDFRStreamForFile(`${__dirname}/../../../documents/${form.file}`),
     new hummus.PDFStreamForResponse(res)
   );
 
-  const crimsonTextFont = pdfWriter.getFontForFile(__dirname + '/../../../fonts/CrimsonText-Regular.ttf');
-  const signatureFont = pdfWriter.getFontForFile(__dirname + '/../../../fonts/Damion-Regular.ttf');
+  const crimsonTextFont = pdfWriter.getFontForFile(`${__dirname}/../../../fonts/CrimsonText-Regular.ttf`);
+  const signatureFont = pdfWriter.getFontForFile(`${__dirname}/../../../fonts/Damion-Regular.ttf`);
   const fontColor = 0x000000;
 
   const pageModifier = new hummus.PDFPageModifier(pdfWriter, 0);

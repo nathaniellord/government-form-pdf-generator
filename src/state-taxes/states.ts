@@ -6,8 +6,7 @@ export class StateWithholdingForms {
     return this;
   }
 
-  generateStateForm(state: string, req: any, res: any, year = new Date().getFullYear()) {
-    console.log(year);
+  generateStateForm(state: string, req: any, res: any) {
     let stateTaxForm
     if (state === 'al') {
       stateTaxForm = alabama;
@@ -73,7 +72,9 @@ export class StateWithholdingForms {
       stateTaxForm = require('./wisconsin');
     }
     if (stateTaxForm) {
-      stateTaxForm(req, res, year);
+      stateTaxForm(req, res);
+    } else {
+      res.status(404).send(`State withholding form not located for the state ${state}`);
     }
   }
 

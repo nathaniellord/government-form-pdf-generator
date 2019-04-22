@@ -7,6 +7,8 @@ function generateFederalForm(formName, data, res) {
     }
     if (federalTaxForm) {
         federalTaxForm(data, res);
+    } else {
+        res.status(404).send(`Could not locate the federal form ${formName}`);
     }
 }
 

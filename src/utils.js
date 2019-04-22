@@ -42,9 +42,45 @@ function layoutCharactersRightAlign(context, string, left, bottom, spacing, font
   }
 }
 
+function getStateWithholdingForm(forms, date) {
+  const correctForm = forms.filter(form => {
+    if (date > form.startDate) {
+      if (form.endDate === null) {
+        return true;
+      } else if (form.endDate > date) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  });
+  if (correctForm.length) {
+    return correctForm[0];
+  } else {
+    return null;
+  }
+}
+
+function validateFields(fields, body) {
+  const errors = [];
+  fields.forEach(element => {
+
+  });
+
+
+  if (errors.length) {
+    return errors;
+  } else {
+    return null;
+  }
+}
+
 module.exports = {
   rightAlign: rightAlign,
   centerAlign: centerAlign,
   leftAlignWithSpacing: layoutCharacters,
-  rightAlignWithSpacing: layoutCharactersRightAlign
+  rightAlignWithSpacing: layoutCharactersRightAlign,
+  getStateWithholdingForm: getStateWithholdingForm
 };
