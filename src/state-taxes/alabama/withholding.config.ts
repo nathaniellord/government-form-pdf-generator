@@ -49,6 +49,42 @@ module.exports = {
                 eState: 'UT',
                 eZip: '84101',
                 date: '03/28/2019'
+            },
+            layout: function (context: any, fonts: any, data: any) {
+                const fontColor = 0x000000;
+                context
+                    .writeText(`${data.firstName} ${data.middleInitial} ${data.lastName}`, 40, 595, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.ssn, 445, 595, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.address, 40, 571, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.city, 325, 571, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.state, 458, 571, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.zip, 505, 571, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.line1, 520, 515, { font: fonts.standard, size: 18, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.line2, 520, 490, { font: fonts.standard, size: 18, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.line3, 520, 455, { font: fonts.standard, size: 18, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.line4, 520, 430, { font: fonts.standard, size: 18, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.line5, 520, 405, { font: fonts.standard, size: 18, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.line6, 520, 380, { font: fonts.standard, size: 18, colorspace: 'rgb', color: fontColor })
+                    .writeText(data.date, 460, 310, { font: fonts.standard, size: 18, colorspace: 'rgb', color: fontColor })
+                    .writeText(`${data.firstName} ${data.middleInitial} ${data.lastName}`, 150, 310, { font: fonts.signature, size: 18, colorspace: 'rgb', color: fontColor })
+                if (data.eName) {
+                    context.writeText(data.eName, 40, 262, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                }
+                if (data.eIN) {
+                    context.writeText(data.eIN, 445, 262, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                }
+                if (data.eAddress) {
+                    context.writeText(data.eAddress, 40, 238, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                }
+                if (data.eCity) {
+                    context.writeText(data.eCity, 325, 238, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                }
+                if (data.eState) {
+                    context.writeText(data.eState, 458, 238, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                }
+                if (data.eZip) {
+                    context.writeText(data.eZip, 505, 238, { font: fonts.standard, size: 14, colorspace: 'rgb', color: fontColor })
+                }
             }
         }
     ]

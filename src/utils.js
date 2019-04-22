@@ -65,7 +65,22 @@ function getStateWithholdingForm(forms, date) {
 
 function validateFields(fields, body) {
   const errors = [];
-  fields.forEach(element => {
+  fields.forEach(field => {
+    // Do required field validation first
+    if (field.required && !body.hasOwnProperty(field.name)) {
+      errors.push(`Missing required field '${field.name}'`);
+    }
+    // Number Validation
+
+    // Date Validation
+
+    // Zip Validation
+
+    // Phone Validation
+
+    // SSN Validation
+
+    // EIN Validation
 
   });
 
