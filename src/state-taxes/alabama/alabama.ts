@@ -1,4 +1,4 @@
-var hummus = require('hummus');
+import hummus from 'hummus';
 
 function generatePdf(req: any, res: any, year: number) {
   /** here we will place the pdf building code **/

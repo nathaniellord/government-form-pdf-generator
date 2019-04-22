@@ -32,3 +32,4 @@ app.get('/federal/:formName/:year?', function (req, res) {
   res.end();
 });
 app.listen(config.get('port'));
+console.log(`Running app on port ${config.get('port')}`);
